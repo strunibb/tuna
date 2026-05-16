@@ -2,21 +2,27 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Тренажёр аккордов</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Тренировка аккордов на баррэ</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #17191d;
-      --panel: #202126;
-      --card: #222326;
-      --card-soft: #2b2d31;
+      --bg1: #111827;
+      --bg2: #0b1020;
+      --card: rgba(255, 255, 255, 0.07);
+      --line: rgba(255, 255, 255, 0.14);
       --text: #ffffff;
-      --muted: #8d8f95;
-      --green: #08d39d;
-      --red: #ff4d5a;
-      --fret: #635d53;
-      --border: rgba(255,255,255,0.12);
+      --muted: rgba(255,255,255,.68);
+      --green: #22c55e;
+      --blue: #38bdf8;
+      --red: #ef4444;
+      --violet: #8b5cf6;
+      --pink: #ec4899;
+      --shadow: 0 20px 60px rgba(0,0,0,.40);
+      --radius: 24px;
     }
 
     * {
@@ -26,1428 +32,882 @@
 
     html, body {
       margin: 0;
-      padding: 0;
       min-height: 100%;
-      background: var(--bg);
+      font-family: Montserrat, system-ui, -apple-system, Arial, sans-serif;
       color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(56,189,248,.18), transparent 34%),
+        radial-gradient(circle at 85% 20%, rgba(139,92,246,.14), transparent 32%),
+        linear-gradient(145deg, var(--bg1), var(--bg2));
     }
 
     body {
       min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 14px;
+    }
+
+    button {
+      font-family: inherit;
     }
 
     .app {
-      width: 100%;
-      max-width: 1180px;
-      min-height: 100vh;
-      margin: 0 auto;
-      padding: 14px 16px 72px;
-    }
-
-    .screen {
-      display: none;
-      width: 100%;
-      max-width: 820px;
-      margin: 0 auto;
-      min-height: calc(100vh - 92px);
-    }
-
-    .screen.active {
+      width: min(1120px, 100%);
+      min-height: min(730px, calc(100vh - 28px));
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.04));
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
+      gap: 16px;
     }
 
-    .topbar {
-      display: grid;
-      grid-template-columns: 42px 1fr 42px;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
-
-    .back,
-    .icon-btn {
-      width: 40px;
-      height: 40px;
-      border: none;
-      background: transparent;
-      color: white;
-      font-size: 30px;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-
-    .icon-btn {
-      font-size: 22px;
-      color: #dcdde0;
-    }
-
-    .title {
-      text-align: center;
-      font-size: 21px;
+    .school-label {
+      font-size: 12px;
       font-weight: 700;
+      color: rgba(255,255,255,.62);
+      letter-spacing: .03em;
+      margin-bottom: -2px;
     }
 
-    .menu-list {
+    .top {
       display: flex;
-      flex-direction: column;
-      border-top: 1px solid var(--border);
-      background: rgba(255,255,255,0.01);
-      border-radius: 16px;
-      overflow: hidden;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
     }
 
-    .menu-row {
-      width: 100%;
-      min-height: 78px;
-      border: none;
-      border-bottom: 1px solid var(--border);
-      background: transparent;
-      color: white;
-      display: grid;
-      grid-template-columns: 54px 1fr auto;
+    .brand {
+      display: flex;
       align-items: center;
       gap: 12px;
-      text-align: left;
-      cursor: pointer;
-      padding: 0 16px;
     }
 
-    .menu-row:last-child {
-      border-bottom: none;
-    }
-
-    .menu-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 11px;
-      background: #2b2d31;
+    .logo {
+      width: 46px;
+      height: 46px;
       display: grid;
       place-items: center;
-      font-size: 23px;
-      flex-shrink: 0;
-    }
-
-    .menu-title {
+      border-radius: 15px;
+      background: linear-gradient(145deg, var(--blue), var(--violet));
       font-size: 24px;
-      line-height: 1.15;
-      font-weight: 450;
-    }
-
-    .menu-subtitle {
-      margin-top: 5px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .toggle-row {
-      min-height: 80px;
-      display: grid;
-      grid-template-columns: 54px 1fr auto;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid var(--border);
-      padding: 0 16px;
-    }
-
-    .switch {
-      width: 60px;
-      height: 34px;
-      border-radius: 999px;
-      background: #6c6e74;
-      position: relative;
-      cursor: pointer;
-      transition: 0.18s ease;
+      box-shadow: 0 14px 28px rgba(56,189,248,.16);
       flex-shrink: 0;
     }
 
-    .switch::before {
-      content: "";
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      top: 3px;
-      left: 3px;
-      background: white;
-      transition: 0.18s ease;
+    .title-wrap h1 {
+      margin: 0;
+      font-size: clamp(18px, 2.3vw, 28px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.03em;
     }
 
-    .switch.active {
-      background: var(--green);
-    }
-
-    .switch.active::before {
-      left: 29px;
-    }
-
-    .groups {
+    .stats {
       display: flex;
-      flex-direction: column;
-      gap: 22px;
-      padding-bottom: 110px;
-    }
-
-    .group-title {
-      font-size: 24px;
-      line-height: 1.15;
-      margin-bottom: 12px;
-      font-weight: 500;
-    }
-
-    .chord-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 8px;
-    }
-
-    .chord-tile {
-      min-height: 64px;
-      border: none;
-      border-radius: 12px;
-      background: var(--card);
-      color: #72747a;
-      font-size: 24px;
-      font-weight: 500;
-      cursor: pointer;
-      transition: 0.15s ease;
-      padding: 8px 6px;
-      word-break: break-word;
-    }
-
-    .chord-tile.selected {
-      background: var(--green);
-      color: white;
-    }
-
-    .fixed-action {
-      position: fixed;
-      left: 50%;
-      bottom: 68px;
-      transform: translateX(-50%);
-      width: min(440px, calc(100% - 32px));
-      z-index: 20;
-    }
-
-    .primary-btn {
-      width: 100%;
-      min-height: 54px;
-      border: none;
-      border-radius: 999px;
-      background: var(--green);
-      color: white;
-      font-size: 21px;
-      font-weight: 750;
-      cursor: pointer;
-      box-shadow: 0 10px 24px rgba(8, 211, 157, 0.18);
-    }
-
-    .primary-btn:disabled {
-      opacity: 0.38;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      bottom: 0;
-      transform: translateX(-50%);
-      width: min(1180px, 100%);
-      height: 52px;
-      background: #202126;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: var(--green);
-      font-size: 11px;
-      gap: 2px;
-      text-align: center;
-      min-width: 100px;
-    }
-
-    .nav-icon {
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .game-head {
-      display: grid;
-      grid-template-columns: 44px 1fr 92px;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 10px;
-    }
-
-    .pause {
-      border: none;
-      background: transparent;
-      color: #bfc2c8;
-      font-size: 32px;
-      cursor: pointer;
-      border-radius: 10px;
-    }
-
-    .score {
-      text-align: center;
-      font-size: 46px;
-      font-weight: 700;
-      line-height: 1;
-    }
-
-    .timer {
-      display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       justify-content: flex-end;
-      gap: 7px;
-      color: #e8e8e8;
-      font-size: 22px;
-      font-weight: 700;
     }
 
-    .clock {
-      width: 23px;
-      height: 23px;
-      border-radius: 50%;
-      background: #bfc2c8;
-      display: inline-block;
-      position: relative;
-      flex-shrink: 0;
-    }
-
-    .clock::before {
-      content: "";
-      position: absolute;
-      left: 10px;
-      top: 5px;
-      width: 3px;
-      height: 8px;
-      background: #222;
-      border-radius: 2px;
-    }
-
-    .clock::after {
-      content: "";
-      position: absolute;
-      left: 10px;
-      top: 11px;
-      width: 7px;
-      height: 3px;
-      background: #222;
-      border-radius: 2px;
-      transform: rotate(35deg);
-      transform-origin: left center;
-    }
-
-    .game-area {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      min-height: 0;
-    }
-
-    .feedback {
-      min-height: 24px;
+    .stat {
+      min-width: 96px;
+      padding: 9px 12px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(0,0,0,.16);
       text-align: center;
-      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 18px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    .stat-label {
+      margin-top: 4px;
       color: var(--muted);
-      font-size: 16px;
-      font-weight: 650;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
     }
 
-    .feedback.good {
-      color: var(--green);
+    .task-card {
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56,189,248,.12), transparent 30%),
+        radial-gradient(circle at 100% 0%, rgba(236,72,153,.10), transparent 30%),
+        rgba(255,255,255,.05);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 14px;
+      align-items: center;
     }
 
-    .feedback.bad {
-      color: var(--red);
+    .task-main {
+      min-width: 0;
     }
 
     .task-title {
-      text-align: center;
-      font-size: 34px;
-      font-weight: 750;
-      margin-bottom: 12px;
-      min-height: 40px;
-      word-break: break-word;
+      margin: 0;
+      font-size: clamp(20px, 3vw, 38px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.04em;
     }
 
-    .chord-stage {
-      display: grid;
-      grid-template-columns: 1fr 44px;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .diagram-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 260px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.015);
-      padding: 6px;
-    }
-
-    .combo {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
+    .task-subtitle {
+      margin: 8px 0 0;
       color: var(--muted);
+      font-size: 14px;
+      line-height: 1.4;
+      font-weight: 600;
+    }
+
+    .current-chord {
+      color: #ffffff;
+    }
+
+    .string-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: rgba(56,189,248,.10);
+      border: 1px solid rgba(56,189,248,.35);
+      color: #bae6fd;
+      font-weight: 800;
+      white-space: nowrap;
       font-size: 13px;
     }
 
-    .combo-bars {
+    .restart-btn {
+      min-height: 42px;
+      padding: 0 16px;
+      border: 1px solid rgba(255,255,255,.15);
+      border-radius: 14px;
+      background: rgba(255,255,255,.07);
+      color: white;
+      cursor: pointer;
+      font-weight: 800;
+      font-size: 13px;
+      transition: .18s;
+    }
+
+    .restart-btn:hover {
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.10);
+    }
+
+    .workzone {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr);
+      gap: 16px;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .fretboard-panel,
+    .answer-panel {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(0,0,0,.14);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+    }
+
+    .fretboard-panel {
+      padding: 14px;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       gap: 10px;
     }
 
-    .combo-bar {
-      width: 22px;
-      height: 58px;
+    .fretboard {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      padding: 16px;
+      border-radius: 18px;
+      background:
+        linear-gradient(90deg, rgba(59,7,100,.95), rgba(147,51,234,.58), rgba(236,72,153,.50), rgba(239,68,68,.72)),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.08));
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow:
+        inset 0 4px 20px rgba(0,0,0,.30),
+        0 16px 36px rgba(0,0,0,.24);
+      overflow: hidden;
+    }
+
+    .string-row {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(8, minmax(40px, 1fr));
+      gap: 8px;
+      align-items: center;
+    }
+
+    .string-row::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 4px;
+      transform: translateY(-50%);
+      background: linear-gradient(90deg, rgba(255,255,255,.95), rgba(255,255,255,.74));
+      box-shadow: 0 0 14px rgba(255,255,255,.14);
+      z-index: 0;
+    }
+
+    .fret {
+      position: relative;
+      z-index: 1;
+      min-height: clamp(48px, 5.6vw, 68px);
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      background: rgba(0,0,0,.18);
+      color: rgba(255,255,255,.92);
+      cursor: pointer;
+      font-size: clamp(14px, 1.6vw, 20px);
+      font-weight: 900;
+      transition: .16s;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.06);
+    }
+
+    .fret::before {
+      content: "";
+      position: absolute;
+      left: -6px;
+      top: 50%;
+      width: 3px;
+      height: 30px;
+      transform: translateY(-50%);
       border-radius: 999px;
-      background: #56585f;
+      background: rgba(255,255,255,.56);
     }
 
-    .combo-bar.active {
-      background: var(--green);
+    .fret:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.10);
+      box-shadow: 0 10px 22px rgba(0,0,0,.25);
     }
 
-    .answers {
+    .fret.correct {
+      background: rgba(34,197,94,.92) !important;
+      border-color: rgba(187,247,208,.92) !important;
+      color: white;
+      box-shadow: 0 0 0 4px rgba(34,197,94,.16), 0 14px 26px rgba(34,197,94,.22);
+      animation: pop .34s ease;
+    }
+
+    .fret.wrong {
+      background: rgba(239,68,68,.9) !important;
+      border-color: rgba(254,202,202,.9) !important;
+      animation: shake .34s ease;
+    }
+
+    .answer-panel {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step-title {
+      margin: 0;
+      font-size: clamp(18px, 2vw, 24px);
+      line-height: 1.15;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    .step-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    .shape-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 10px;
-      margin-top: 0;
+      margin-top: 4px;
     }
 
-    .answer {
-      min-height: 62px;
-      border: none;
-      border-radius: 14px;
-      background: white;
-      color: black;
-      font-size: 24px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: 0.12s ease;
-      padding: 10px;
-      word-break: break-word;
-    }
-
-    .answer:active {
-      transform: scale(0.97);
-    }
-
-    .answer.correct {
-      background: var(--green);
-      color: white;
-    }
-
-    .answer.wrong {
-      background: var(--red);
-      color: white;
-    }
-
-    .library-list {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      padding-bottom: 20px;
-    }
-
-    .library-card {
-      border-radius: 20px;
-      background: var(--card);
-      padding: 14px;
-      cursor: pointer;
-    }
-
-    .library-name {
-      font-size: 25px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      word-break: break-word;
-    }
-
-    .library-diagram {
-      display: flex;
-      justify-content: center;
-      background: #191a1d;
+    .shape-btn {
+      min-height: 64px;
+      border: 1px solid rgba(255,255,255,.14);
       border-radius: 16px;
-      padding: 10px;
+      background: rgba(255,255,255,.07);
+      color: white;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 900;
+      cursor: pointer;
+      transition: .16s;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.05);
     }
 
-    .result-box {
-      margin: auto 0;
+    .shape-btn:disabled {
+      cursor: not-allowed;
+      opacity: .55;
+    }
+
+    .shape-btn:not(:disabled):hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.11);
+    }
+
+    .shape-btn.correct {
+      background: var(--green);
+      border-color: #bbf7d0;
+    }
+
+    .shape-btn.wrong {
+      background: var(--red);
+      border-color: #fecaca;
+    }
+
+    .message {
+      min-height: 42px;
+      padding: 11px 13px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      color: rgba(255,255,255,.78);
+      font-size: 13px;
+      line-height: 1.35;
+      font-weight: 700;
+    }
+
+    .message.good {
+      color: #bbf7d0;
+      border-color: rgba(34,197,94,.30);
+      background: rgba(34,197,94,.10);
+    }
+
+    .message.bad {
+      color: #fecaca;
+      border-color: rgba(239,68,68,.30);
+      background: rgba(239,68,68,.10);
+    }
+
+    .next-btn {
+      min-height: 50px;
+      border: none;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      color: white;
+      font-size: 15px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .16s;
+      box-shadow: 0 14px 28px rgba(34,197,94,.14);
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .next-btn:disabled {
+      opacity: .38;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .complete {
+      display: none;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(34,197,94,.12);
+      border: 1px solid rgba(34,197,94,.32);
       text-align: center;
-      padding: 26px 18px;
     }
 
-    .result-box h2 {
-      margin: 0 0 10px;
-      font-size: 34px;
+    .complete.active {
+      display: block;
     }
 
-    .result-box p {
-      margin: 0 0 24px;
+    .complete h2 {
+      margin: 0 0 8px;
+      font-size: clamp(20px, 2.2vw, 28px);
+      font-weight: 900;
+    }
+
+    .complete p {
+      margin: 0;
       color: var(--muted);
-      font-size: 17px;
-      line-height: 1.45;
+      font-weight: 700;
+      font-size: 13px;
     }
 
-    svg {
-      max-width: 100%;
-      overflow: visible;
+    @keyframes pop {
+      0% { transform: scale(1); }
+      55% { transform: scale(1.08); }
+      100% { transform: scale(1); }
     }
 
-    @media (min-width: 700px) {
-      .chord-grid {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-7px); }
+      50% { transform: translateX(7px); }
+      75% { transform: translateX(-7px); }
+    }
+
+    @media (max-width: 880px) {
+      body {
+        align-items: flex-start;
       }
 
-      .library-list {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-    }
-
-    @media (min-width: 980px) {
       .app {
-        padding: 12px 24px 62px;
+        min-height: auto;
       }
 
-      .screen {
-        max-width: 760px;
-        min-height: calc(100vh - 76px);
+      .workzone {
+        grid-template-columns: 1fr;
       }
 
-      .chord-grid {
-        grid-template-columns: repeat(5, minmax(0, 1fr));
+      .task-card {
+        grid-template-columns: 1fr;
       }
 
-      .library-list {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+      .stats {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (max-width: 560px) {
+      body {
+        padding: 8px;
       }
 
-      .menu-row {
-        min-height: 70px;
+      .app {
+        padding: 12px;
+        border-radius: 18px;
       }
 
-      .toggle-row {
-        min-height: 72px;
-      }
-
-      .menu-title {
-        font-size: 22px;
-      }
-
-      .menu-subtitle {
-        font-size: 12px;
-      }
-
-      .group-title {
-        font-size: 22px;
-      }
-
-      .chord-tile {
-        min-height: 58px;
-        font-size: 21px;
-      }
-
-      .game-head {
-        margin-bottom: 4px;
-      }
-
-      .score {
-        font-size: 40px;
-      }
-
-      .timer {
+      .logo {
+        width: 40px;
+        height: 40px;
+        border-radius: 13px;
         font-size: 20px;
       }
 
-      .diagram-wrap {
-        min-height: 230px;
+      .stat {
+        min-width: calc(50% - 4px);
       }
 
-      .answer {
+      .fretboard {
+        gap: 14px;
+        padding: 12px;
+      }
+
+      .string-row {
+        grid-template-columns: repeat(8, minmax(28px, 1fr));
+        gap: 4px;
+      }
+
+      .fret {
+        min-height: 42px;
+        border-radius: 10px;
+        font-size: 12px;
+      }
+
+      .fret::before {
+        left: -4px;
+        width: 3px;
+        height: 24px;
+      }
+
+      .shape-btn {
         min-height: 56px;
-        font-size: 22px;
-      }
-
-      .bottom-nav {
-        height: 46px;
-      }
-
-      .fixed-action {
-        bottom: 58px;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .app {
-        padding-bottom: 72px;
-      }
-
-      .screen {
-        min-height: calc(100vh - 86px);
-      }
-
-      .menu-title {
-        font-size: 24px;
-      }
-
-      .group-title {
-        font-size: 24px;
-      }
-
-      .chord-tile {
-        min-height: 68px;
-        font-size: 24px;
-      }
-
-      .answer {
-        min-height: 78px;
-        font-size: 28px;
-      }
-
-      .score {
-        font-size: 52px;
-      }
-
-      .timer {
-        font-size: 22px;
-      }
-
-      .game-area {
-        min-height: 500px;
-      }
-
-      .task-title {
-        font-size: 34px;
-      }
-
-      .diagram-wrap {
-        min-height: 330px;
-      }
-
-      .combo-bar {
-        width: 26px;
-        height: 74px;
-      }
-
-      .fixed-action {
-        bottom: 68px;
-        width: calc(100% - 32px);
-      }
-
-      .bottom-nav {
-        height: 54px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .chord-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      .answers {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .menu-row,
-      .toggle-row {
-        padding-left: 10px;
-        padding-right: 10px;
       }
     }
   </style>
 </head>
 
 <body>
-  <div class="app">
+  <main class="app">
+    <div class="school-label">Онлайн школа Струны будущего</div>
 
-    <section class="screen active" id="menuScreen">
-      <div class="topbar">
-        <button class="back" type="button">‹</button>
-        <div class="title"></div>
-        <div></div>
-      </div>
-
-      <div class="menu-list">
-        <div class="toggle-row">
-          <div class="menu-icon">⏰</div>
-          <div>
-            <div class="menu-title">Неогранич. время</div>
-          </div>
-          <div class="switch" id="timeSwitch"></div>
-        </div>
-
-        <button class="menu-row" data-mode="learn" type="button">
-          <div class="menu-icon">🎸</div>
-          <div>
-            <div class="menu-title">Обучение аккордам</div>
-            <div class="menu-subtitle">Новые аккорды открываются после 3 правильных подряд</div>
-          </div>
-          <div></div>
-        </button>
-
-        <button class="menu-row" data-mode="library" type="button">
-          <div class="menu-icon">🎼</div>
-          <div>
-            <div class="menu-title">Схемы аккордов</div>
-            <div class="menu-subtitle">Справочник выбранных аппликатур</div>
-          </div>
-          <div></div>
-        </button>
-
-        <button class="menu-row" data-mode="ear" type="button">
-          <div class="menu-icon">🎛️</div>
-          <div>
-            <div class="menu-title">Упр. на слух</div>
-            <div class="menu-subtitle">Режим под аудио аккордов</div>
-          </div>
-          <div></div>
-        </button>
-
-        <button class="menu-row" data-mode="display" type="button">
-          <div class="menu-icon">🎸</div>
-          <div>
-            <div class="menu-title">Играть отображаемые аккорды</div>
-            <div class="menu-subtitle">Видно название и схема</div>
-          </div>
-          <div></div>
-        </button>
-
-        <button class="menu-row" data-mode="memory" type="button">
-          <div class="menu-icon">❔</div>
-          <div>
-            <div class="menu-title">Играть по памяти</div>
-            <div class="menu-subtitle">Видно только название аккорда</div>
-          </div>
-          <div></div>
-        </button>
-      </div>
-    </section>
-
-    <section class="screen" id="selectScreen">
-      <div class="topbar">
-        <button class="back" id="backToMenu" type="button">‹</button>
-        <div class="title">Выбрать аккорды</div>
-        <button class="icon-btn" id="clearSelectedBtn" type="button">×</button>
-      </div>
-
-      <div class="groups" id="groups"></div>
-
-      <div class="fixed-action">
-        <button class="primary-btn" id="saveAndPlayBtn" type="button">Сохранить и играть</button>
-      </div>
-    </section>
-
-    <section class="screen" id="gameScreen">
-      <div class="game-head">
-        <button class="pause" id="backFromGame" type="button">‹</button>
-        <div class="score" id="score">0</div>
-        <div class="timer" id="timerWrap">
-          <span class="clock"></span>
-          <span id="timer">30</span>
+    <section class="top">
+      <div class="brand">
+        <div class="logo">🎸</div>
+        <div class="title-wrap">
+          <h1>Тренировка аккордов на баррэ</h1>
         </div>
       </div>
 
-      <div class="game-area">
-        <div class="feedback" id="feedback"></div>
-        <div class="task-title" id="taskTitle"></div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="progressValue">0/0</div>
+          <div class="stat-label">Прогресс</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="scoreValue">0</div>
+          <div class="stat-label">Верно</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="mistakeValue">0</div>
+          <div class="stat-label">Ошибки</div>
+        </div>
+      </div>
+    </section>
 
-        <div class="chord-stage">
-          <div class="diagram-wrap" id="diagram"></div>
+    <section class="task-card">
+      <div class="task-main">
+        <h2 class="task-title" id="taskTitle">
+          Найдите ноту для аккорда <span class="current-chord">—</span>
+        </h2>
+        <p class="task-subtitle" id="taskSubtitle">
+          <span class="string-badge">на 6-й струне</span>
+        </p>
+      </div>
 
-          <div class="combo">
-            <div class="combo-bars">
-              <div class="combo-bar" id="bar1"></div>
-              <div class="combo-bar" id="bar2"></div>
-              <div class="combo-bar" id="bar3"></div>
-            </div>
-            <div>Комбо</div>
-          </div>
+      <button class="restart-btn" type="button" id="restartBtn">Начать заново</button>
+    </section>
+
+    <section class="workzone">
+      <div class="fretboard-panel">
+        <div class="fretboard" id="fretboard">
+          <div class="string-row" id="string6"></div>
+          <div class="string-row" id="string5"></div>
+        </div>
+      </div>
+
+      <aside class="answer-panel">
+        <h3 class="step-title" id="stepTitle">Шаг 1: найдите ноту</h3>
+        <p class="step-text" id="stepText">
+          Нажми корень аккорда на нужной струне.
+        </p>
+
+        <div class="shape-grid" id="shapeGrid">
+          <button class="shape-btn" type="button" data-shape="E" disabled>E</button>
+          <button class="shape-btn" type="button" data-shape="Em" disabled>Em</button>
+          <button class="shape-btn" type="button" data-shape="A" disabled>A</button>
+          <button class="shape-btn" type="button" data-shape="Am" disabled>Am</button>
         </div>
 
-        <div class="answers" id="answers"></div>
-      </div>
+        <div class="message" id="message">
+          Нажми правильную ноту на грифе.
+        </div>
+
+        <button class="next-btn" type="button" id="nextBtn" disabled>Следующий аккорд</button>
+
+        <div class="complete" id="completeBox">
+          <h2>Готово! 🎉</h2>
+          <p>Все аккорды пройдены. Можно начать заново и закрепить результат.</p>
+        </div>
+      </aside>
     </section>
-
-    <section class="screen" id="libraryScreen">
-      <div class="topbar">
-        <button class="back" id="backFromLibrary" type="button">‹</button>
-        <div class="title">Схемы аккордов</div>
-        <div></div>
-      </div>
-
-      <div class="library-list" id="libraryList"></div>
-    </section>
-
-    <section class="screen" id="finishScreen">
-      <div class="result-box">
-        <h2>Готово!</h2>
-        <p id="finishText">Тренировка завершена.</p>
-        <button class="primary-btn" id="restartBtn" type="button">Продолжить</button>
-      </div>
-    </section>
-
-    <div class="bottom-nav">
-      <div class="nav-item">
-        <div class="nav-icon">▥</div>
-        <div>Инструменты</div>
-      </div>
-    </div>
-
-  </div>
+  </main>
 
   <script>
-    const GROUPS = [
-      { title: "4 основных аккорда", chords: ["G", "D", "Em", "C"] },
-      { title: "Открытые аккорды", chords: ["A", "E", "Am", "F", "Dm"] },
-      { title: "Квинтаккорды", chords: ["G5", "D5", "E5", "C5", "A5"] },
-      { title: "Септаккорды", chords: ["G7", "A7", "E7", "D7", "B7"] },
-      { title: "Аккорды тональности G", chords: ["G", "Cadd9", "Em7", "Dsus4", "A7sus4"] },
-      { title: "Аккорды maj7", chords: ["Cmaj7", "Fmaj7", "Amaj7", "Dmaj7", "Gmaj7"] },
-      { title: "Аккорды extra power", chords: ["F5", "Bb5", "A5(th5)", "Eb5", "D5(5th)"] },
-      { title: "Аккорды extra power", chords: ["F#5", "C#5", "G#5", "B5", "E5(7th)"] },
-      { title: "Аккорды A shape", chords: ["Bb", "Bbm", "C#", "C#m", "Dm"] },
-      { title: "Аккорды A shape", chords: ["B", "Bm", "C", "Cm", "D", "D#"] },
-      { title: "Аккорды E shape", chords: ["F", "Fm", "G", "Gm", "Am"] },
-      { title: "Аккорды E shape", chords: ["F#", "F#m", "G#", "G#m", "A"] }
-    ];
-
-    const CHORDS = {
-      G: { muted: [], open: [4, 3, 2], fingers: [[6, 3], [5, 2], [1, 3]] },
-      D: { muted: [6, 5], open: [4], fingers: [[3, 2], [2, 3], [1, 2]] },
-      Em: { muted: [], open: [6, 3, 2, 1], fingers: [[5, 2], [4, 2]] },
-      C: { muted: [6], open: [3, 1], fingers: [[5, 3], [4, 2], [2, 1]] },
-
-      A: { muted: [6], open: [5, 1], fingers: [[4, 2], [3, 2], [2, 2]] },
-      E: { muted: [], open: [6, 2, 1], fingers: [[5, 2], [4, 2], [3, 1]] },
-      Am: { muted: [6], open: [5, 1], fingers: [[4, 2], [3, 2], [2, 1]] },
-      F: { muted: [], open: [], barre: [1, 6, 1], fingers: [[5, 3], [4, 3], [3, 2]] },
-      Dm: { muted: [6, 5], open: [4], fingers: [[3, 2], [2, 3], [1, 1]] },
-
-      G5: { startFret: 3, muted: [3, 2, 1], open: [], fingers: [[6, 3], [5, 5], [4, 5]] },
-      D5: { startFret: 5, muted: [6, 3, 2, 1], open: [], fingers: [[5, 5], [4, 7], [3, 7]] },
-      E5: { muted: [3, 2, 1], open: [6], fingers: [[5, 2], [4, 2]] },
-      C5: { startFret: 3, muted: [6, 2, 1], open: [], fingers: [[5, 3], [4, 5], [3, 5]] },
-      A5: { muted: [6, 2, 1], open: [5], fingers: [[4, 2], [3, 2]] },
-
-      F5: { muted: [3, 2, 1], open: [], fingers: [[6, 1], [5, 3], [4, 3]] },
-      Bb5: { muted: [6, 2, 1], open: [], fingers: [[5, 1], [4, 3], [3, 3]] },
-      "A5(th5)": { startFret: 5, muted: [3, 2, 1], open: [], fingers: [[6, 5], [5, 7], [4, 7]] },
-      Eb5: { startFret: 6, muted: [6, 2, 1], open: [], fingers: [[5, 6], [4, 8], [3, 8]] },
-      "D5(5th)": { startFret: 5, muted: [6, 3, 2, 1], open: [], fingers: [[5, 5], [4, 7], [3, 7]] },
-      "F#5": { startFret: 2, muted: [3, 2, 1], open: [], fingers: [[6, 2], [5, 4], [4, 4]] },
-      "C#5": { startFret: 4, muted: [6, 2, 1], open: [], fingers: [[5, 4], [4, 6], [3, 6]] },
-      "G#5": { startFret: 4, muted: [3, 2, 1], open: [], fingers: [[6, 4], [5, 6], [4, 6]] },
-      B5: { startFret: 2, muted: [6, 2, 1], open: [], fingers: [[5, 2], [4, 4], [3, 4]] },
-      "E5(7th)": { startFret: 7, muted: [6, 3, 2, 1], open: [], fingers: [[5, 7], [4, 9], [3, 9]] },
-
-      G7: { muted: [], open: [4, 3, 2], fingers: [[6, 3], [5, 2], [1, 1]] },
-      A7: { muted: [6], open: [5, 3, 1], fingers: [[4, 2], [2, 2]] },
-      E7: { muted: [], open: [6, 4, 2, 1], fingers: [[5, 2], [3, 1]] },
-      D7: { muted: [6, 5], open: [4], fingers: [[3, 2], [2, 1], [1, 2]] },
-      B7: { muted: [6], open: [1], fingers: [[5, 2], [4, 1], [3, 2], [2, 0]] },
-
-      Cadd9: { muted: [6], open: [4], fingers: [[5, 3], [3, 2], [2, 3], [1, 3]] },
-      Em7: { muted: [], open: [6, 3], fingers: [[5, 2], [4, 2], [2, 3], [1, 3]] },
-      Dsus4: { muted: [6, 5], open: [4], fingers: [[3, 2], [2, 3], [1, 3]] },
-      A7sus4: { muted: [6], open: [5, 3, 1], fingers: [[4, 2], [2, 3]] },
-
-      Cmaj7: { muted: [6], open: [3, 2, 1], fingers: [[5, 3], [4, 2]] },
-      Fmaj7: { muted: [6, 5], open: [1], fingers: [[4, 3], [3, 2], [2, 1]] },
-      Amaj7: { muted: [6], open: [5, 1], fingers: [[4, 2], [3, 1], [2, 2]] },
-      Dmaj7: { muted: [6, 5], open: [4], fingers: [[3, 2], [2, 2], [1, 2]] },
-      Gmaj7: { muted: [], open: [4, 3, 2], fingers: [[6, 3], [5, 2], [1, 2]] },
-
-      Bb: { muted: [6], open: [], barre: [1, 5, 1], fingers: [[4, 3], [3, 3], [2, 3]] },
-      Bbm: { muted: [6], open: [], barre: [1, 5, 1], fingers: [[4, 3], [3, 3], [2, 2]] },
-      "C#": { startFret: 4, muted: [6], open: [], barre: [4, 5, 1], fingers: [[4, 6], [3, 6], [2, 6]] },
-      "C#m": { startFret: 4, muted: [6], open: [], barre: [4, 5, 1], fingers: [[4, 6], [3, 6], [2, 5]] },
-
-      B: { startFret: 2, muted: [6], open: [], barre: [2, 5, 1], fingers: [[4, 4], [3, 4], [2, 4]] },
-      Bm: { startFret: 2, muted: [6], open: [], barre: [2, 5, 1], fingers: [[4, 4], [3, 4], [2, 3]] },
-      Cm: { startFret: 3, muted: [6], open: [], barre: [3, 5, 1], fingers: [[4, 5], [3, 5], [2, 4]] },
-      "D#": { startFret: 6, muted: [6], open: [], barre: [6, 5, 1], fingers: [[4, 8], [3, 8], [2, 8]] },
-
-      Fm: { muted: [], open: [], barre: [1, 6, 1], fingers: [[5, 3], [4, 3]] },
-      Gm: { startFret: 3, muted: [], open: [], barre: [3, 6, 1], fingers: [[5, 5], [4, 5]] },
-      "F#": { startFret: 2, muted: [], open: [], barre: [2, 6, 1], fingers: [[5, 4], [4, 4], [3, 3]] },
-      "F#m": { startFret: 2, muted: [], open: [], barre: [2, 6, 1], fingers: [[5, 4], [4, 4]] },
-      "G#": { startFret: 4, muted: [], open: [], barre: [4, 6, 1], fingers: [[5, 6], [4, 6], [3, 5]] },
-      "G#m": { startFret: 4, muted: [], open: [], barre: [4, 6, 1], fingers: [[5, 6], [4, 6]] }
+    const NOTES = {
+      6: ["F", "F#", "G", "G#", "A", "A#", "B", "C"],
+      5: ["A#", "B", "C", "C#", "D", "D#", "E", "F"]
     };
 
-    let selectedChords = [];
-    let currentMode = "learn";
-    let unlimitedTime = false;
-
-    let unlockedCount = 2;
+    let tasks = [];
+    let currentIndex = 0;
+    let currentTask = null;
+    let rootFound = false;
+    let shapeFound = false;
     let score = 0;
-    let combo = 0;
-    let timer = 30;
-    let timerId = null;
-    let currentChordName = null;
-    let previousChordName = null;
-    let answerLocked = false;
+    let mistakes = 0;
 
-    const menuScreen = document.getElementById("menuScreen");
-    const selectScreen = document.getElementById("selectScreen");
-    const gameScreen = document.getElementById("gameScreen");
-    const libraryScreen = document.getElementById("libraryScreen");
-    const finishScreen = document.getElementById("finishScreen");
-
-    const groupsEl = document.getElementById("groups");
-    const scoreEl = document.getElementById("score");
-    const timerEl = document.getElementById("timer");
-    const timerWrap = document.getElementById("timerWrap");
-    const feedbackEl = document.getElementById("feedback");
+    const string6El = document.getElementById("string6");
+    const string5El = document.getElementById("string5");
     const taskTitleEl = document.getElementById("taskTitle");
-    const diagramEl = document.getElementById("diagram");
-    const answersEl = document.getElementById("answers");
-    const libraryListEl = document.getElementById("libraryList");
-    const finishTextEl = document.getElementById("finishText");
-    const timeSwitch = document.getElementById("timeSwitch");
+    const taskSubtitleEl = document.getElementById("taskSubtitle");
+    const stepTitleEl = document.getElementById("stepTitle");
+    const stepTextEl = document.getElementById("stepText");
+    const messageEl = document.getElementById("message");
+    const nextBtn = document.getElementById("nextBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const progressValue = document.getElementById("progressValue");
+    const scoreValue = document.getElementById("scoreValue");
+    const mistakeValue = document.getElementById("mistakeValue");
+    const completeBox = document.getElementById("completeBox");
+    const shapeButtons = [...document.querySelectorAll(".shape-btn")];
 
-    const comboBars = [
-      document.getElementById("bar1"),
-      document.getElementById("bar2"),
-      document.getElementById("bar3")
-    ];
-
-    function showScreen(screen) {
-      [menuScreen, selectScreen, gameScreen, libraryScreen, finishScreen].forEach(item => {
-        item.classList.remove("active");
-      });
-      screen.classList.add("active");
+    function normalizeChordName(root, quality) {
+      return quality === "minor" ? `${root}m` : root;
     }
 
-    function stopTimer() {
-      clearInterval(timerId);
-      timerId = null;
+    function getCorrectShape(task) {
+      if (task.string === 6 && task.quality === "major") return "E";
+      if (task.string === 6 && task.quality === "minor") return "Em";
+      if (task.string === 5 && task.quality === "major") return "A";
+      if (task.string === 5 && task.quality === "minor") return "Am";
+      return "";
     }
 
-    function unique(array) {
-      return [...new Set(array)];
-    }
+    function buildTasks() {
+      const result = [];
 
-    function getRequiredSelectionCount() {
-      if (currentMode === "library") return 1;
-      return 2;
-    }
-
-    function renderSelector() {
-      groupsEl.innerHTML = "";
-
-      GROUPS.forEach(group => {
-        const section = document.createElement("div");
-        section.className = "group";
-
-        const title = document.createElement("div");
-        title.className = "group-title";
-        title.textContent = group.title;
-
-        const grid = document.createElement("div");
-        grid.className = "chord-grid";
-
-        group.chords.forEach(name => {
-          const button = document.createElement("button");
-          button.className = "chord-tile";
-          button.textContent = name;
-          button.type = "button";
-
-          if (selectedChords.includes(name)) {
-            button.classList.add("selected");
-          }
-
-          button.addEventListener("click", () => {
-            if (selectedChords.includes(name)) {
-              selectedChords = selectedChords.filter(item => item !== name);
-            } else {
-              selectedChords.push(name);
-            }
-
-            selectedChords = unique(selectedChords);
-            renderSelector();
-            updateSaveButton();
+      [6, 5].forEach(stringNumber => {
+        NOTES[stringNumber].forEach((root, index) => {
+          result.push({
+            root,
+            fret: index + 1,
+            string: stringNumber,
+            quality: "major",
+            chordName: normalizeChordName(root, "major")
           });
 
-          grid.appendChild(button);
+          result.push({
+            root,
+            fret: index + 1,
+            string: stringNumber,
+            quality: "minor",
+            chordName: normalizeChordName(root, "minor")
+          });
         });
-
-        section.appendChild(title);
-        section.appendChild(grid);
-        groupsEl.appendChild(section);
       });
 
-      updateSaveButton();
+      return shuffleNoSameChord(result);
     }
 
-    function updateSaveButton() {
-      const btn = document.getElementById("saveAndPlayBtn");
-      const required = getRequiredSelectionCount();
-
-      btn.disabled = selectedChords.length < required;
-
-      if (selectedChords.length === 0) {
-        btn.textContent = "Выберите аккорды";
-      } else {
-        btn.textContent = "Сохранить и играть";
-      }
-    }
-
-    function openSelect(mode) {
-      currentMode = mode;
-      selectedChords = [];
-      renderSelector();
-      showScreen(selectScreen);
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-
-    function startSelectedMode() {
-      selectedChords = unique(selectedChords).filter(name => CHORDS[name]);
-
-      if (currentMode === "library") {
-        if (selectedChords.length < 1) return;
-        renderLibrary();
-        showScreen(libraryScreen);
-        return;
-      }
-
-      if (selectedChords.length < 2) return;
-
-      if (currentMode === "ear") {
-        finishTextEl.textContent = "Упражнение на слух лучше подключить после добавления аудио-сэмплов аккордов. Пока можно использовать остальные режимы.";
-        showScreen(finishScreen);
-        return;
-      }
-
-      startGame();
-    }
-
-    function startGame() {
-      stopTimer();
-
-      unlockedCount = currentMode === "learn"
-        ? Math.min(2, selectedChords.length)
-        : selectedChords.length;
-
-      score = 0;
-      combo = 0;
-      timer = 30;
-      answerLocked = false;
-      currentChordName = null;
-      previousChordName = null;
-
-      updateScore();
-      updateCombo();
-      nextQuestion();
-
-      timerWrap.style.visibility = unlimitedTime ? "hidden" : "visible";
-
-      if (!unlimitedTime) {
-        startTimer();
-      }
-
-      showScreen(gameScreen);
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-
-    function startTimer() {
-      stopTimer();
-      timerEl.textContent = timer.toFixed(0);
-
-      timerId = setInterval(() => {
-        timer -= 0.1;
-
-        if (timer <= 0) {
-          timer = 0;
-          timerEl.textContent = "0";
-          stopTimer();
-          finishTextEl.textContent = `Время вышло. Правильных ответов: ${score}.`;
-          showScreen(finishScreen);
-          return;
-        }
-
-        timerEl.textContent = timer.toFixed(1).replace(".", ",");
-      }, 100);
-    }
-
-    function getUnlockedChords() {
-      return selectedChords.slice(0, unlockedCount);
-    }
-
-    function pickNextChord(pool) {
-      if (!pool || pool.length === 0) return null;
-      if (pool.length === 1) return pool[0];
-
-      const filtered = pool.filter(name => name !== currentChordName);
-      const source = filtered.length ? filtered : pool;
-
-      return source[Math.floor(Math.random() * source.length)];
-    }
-
-    function nextQuestion() {
-      answerLocked = false;
-      feedbackEl.textContent = "";
-      feedbackEl.className = "feedback";
-
-      const pool = getUnlockedChords();
-      const nextChord = pickNextChord(pool);
-
-      if (!nextChord) return;
-
-      previousChordName = currentChordName;
-      currentChordName = nextChord;
-
-      renderTask();
-    }
-
-    function getDiagramScale() {
-      if (window.innerWidth >= 980) return 0.68;
-      if (window.innerWidth >= 700) return 0.78;
-      return 1;
-    }
-
-    function getLibraryScale() {
-      if (window.innerWidth >= 980) return 0.56;
-      if (window.innerWidth >= 700) return 0.66;
-      return 0.78;
-    }
-
-    function renderTask() {
-      diagramEl.innerHTML = "";
-      answersEl.innerHTML = "";
-      taskTitleEl.textContent = "";
-
-      const scale = getDiagramScale();
-
-      if (currentMode === "learn") {
-        renderChord(currentChordName, diagramEl, scale);
-        renderAnswers();
-        return;
-      }
-
-      if (currentMode === "display") {
-        taskTitleEl.textContent = currentChordName;
-        renderChord(currentChordName, diagramEl, scale);
-        renderNextButton();
-        return;
-      }
-
-      if (currentMode === "memory") {
-        taskTitleEl.textContent = currentChordName;
-        renderNextButton();
-      }
-    }
-
-    function renderAnswers() {
-      const unlocked = getUnlockedChords();
-      let variants = [...unlocked];
-
-      while (variants.length < Math.min(4, selectedChords.length)) {
-        const randomName = selectedChords[Math.floor(Math.random() * selectedChords.length)];
-        if (!variants.includes(randomName)) {
-          variants.push(randomName);
-        }
-      }
-
-      variants = shuffle(variants);
-
-      variants.forEach(name => {
-        const button = document.createElement("button");
-        button.className = "answer";
-        button.textContent = name;
-        button.type = "button";
-
-        button.addEventListener("click", () => checkAnswer(name, button));
-        answersEl.appendChild(button);
-      });
-    }
-
-    function renderNextButton() {
-      const button = document.createElement("button");
-      button.className = "primary-btn";
-      button.textContent = "Следующий аккорд";
-      button.type = "button";
-
-      button.addEventListener("click", () => {
-        score++;
-        updateScore();
-        nextQuestion();
-      });
-
-      answersEl.appendChild(button);
-    }
-
-    function checkAnswer(answer, button) {
-      if (answerLocked) return;
-      answerLocked = true;
-
-      const buttons = [...answersEl.querySelectorAll(".answer")];
-
-      if (answer === currentChordName) {
-        button.classList.add("correct");
-        score++;
-        combo++;
-
-        if (!unlimitedTime) {
-          timer += 2;
-        }
-
-        feedbackEl.textContent = "Верно!";
-        feedbackEl.className = "feedback good";
-
-        if (currentMode === "learn" && combo >= 3) {
-          combo = 0;
-          unlockNextChord();
-        }
-      } else {
-        button.classList.add("wrong");
-        combo = 0;
-
-        if (!unlimitedTime) {
-          timer = Math.max(0, timer - 3);
-        }
-
-        buttons.forEach(btn => {
-          if (btn.textContent === currentChordName) {
-            btn.classList.add("correct");
-          }
-        });
-
-        feedbackEl.textContent = `Ошибка. Это ${currentChordName}`;
-        feedbackEl.className = "feedback bad";
-      }
-
-      updateScore();
-      updateCombo();
-
-      setTimeout(() => {
-        if (currentMode === "learn" && unlockedCount >= selectedChords.length && score >= selectedChords.length * 2) {
-          stopTimer();
-          finishTextEl.textContent = "Все выбранные аккорды открыты.";
-          showScreen(finishScreen);
-        } else {
-          nextQuestion();
-        }
-      }, 650);
-    }
-
-    function unlockNextChord() {
-      if (unlockedCount < selectedChords.length) {
-        unlockedCount++;
-        const opened = selectedChords[unlockedCount - 1];
-        feedbackEl.textContent = `Открыт новый аккорд: ${opened}`;
-        feedbackEl.className = "feedback good";
-      }
-    }
-
-    function updateScore() {
-      scoreEl.textContent = score;
-    }
-
-    function updateCombo() {
-      comboBars.forEach((bar, index) => {
-        bar.classList.toggle("active", combo > index);
-      });
-    }
-
-    function renderLibrary() {
-      libraryListEl.innerHTML = "";
-
-      selectedChords.forEach(name => {
-        const card = document.createElement("div");
-        card.className = "library-card";
-
-        const title = document.createElement("div");
-        title.className = "library-name";
-        title.textContent = name;
-
-        const diagram = document.createElement("div");
-        diagram.className = "library-diagram";
-
-        card.appendChild(title);
-        card.appendChild(diagram);
-        libraryListEl.appendChild(card);
-
-        renderChord(name, diagram, getLibraryScale());
-      });
-
-      window.scrollTo({ top: 0, behavior: "instant" });
-    }
-
-    function renderChord(name, target, scale = 1) {
-      const chord = CHORDS[name];
-
-      if (!chord) {
-        target.innerHTML = `<div style="color:#999;font-size:22px;">Нет схемы для ${name}</div>`;
-        return;
-      }
-
-      const width = 280 * scale;
-      const height = 360 * scale;
-      const boardX = 44;
-      const boardY = 72;
-      const boardW = 210;
-      const boardH = 250;
-      const stringGap = boardW / 5;
-      const fretGap = boardH / 4;
-      const startFret = chord.startFret || 1;
-
-      function xForString(stringNumber) {
-        return boardX + (6 - stringNumber) * stringGap;
-      }
-
-      function visualFret(fret) {
-        return fret - startFret + 1;
-      }
-
-      function yForFret(fret) {
-        const vf = visualFret(fret);
-        return boardY + (vf - 0.5) * fretGap;
-      }
-
-      let svg = `
-        <svg width="${width}" height="${height}" viewBox="0 0 280 360">
-          <rect x="${boardX - 12}" y="${boardY}" width="${boardW + 24}" height="${boardH}" rx="12" fill="#3b3c3c"/>
-      `;
-
-      if (startFret === 1) {
-        svg += `<rect x="${boardX - 12}" y="${boardY}" width="${boardW + 24}" height="18" rx="8" fill="#fff"/>`;
-      } else {
-        svg += `<text x="${boardX - 36}" y="${boardY + 26}" text-anchor="middle" fill="#bfc2c8" font-size="22">${startFret}</text>`;
-      }
-
-      for (let i = 0; i < 4; i++) {
-        const y = boardY + (i + 1) * fretGap;
-        svg += `<line x1="${boardX - 10}" y1="${y}" x2="${boardX + boardW + 10}" y2="${y}" stroke="#635d53" stroke-width="3"/>`;
-      }
-
-      for (let i = 0; i < 6; i++) {
-        const x = boardX + i * stringGap;
-        const stringNumber = 6 - i;
-        const isMuted = chord.muted.includes(stringNumber);
-
-        svg += `
-          <line
-            x1="${x}"
-            y1="${boardY}"
-            x2="${x}"
-            y2="${boardY + boardH}"
-            stroke="${isMuted ? "rgba(255,70,70,0.45)" : "#d4d4d4"}"
-            stroke-width="${isMuted ? 7 : 5}"
-          />
-        `;
-      }
-
-      if (startFret === 1) {
-        chord.open.forEach(stringNumber => {
-          const x = xForString(stringNumber);
-          svg += `<text x="${x}" y="${boardY - 30}" text-anchor="middle" fill="#fff" font-size="28">o</text>`;
-        });
-
-        chord.muted.forEach(stringNumber => {
-          const x = xForString(stringNumber);
-          svg += `<text x="${x}" y="${boardY - 30}" text-anchor="middle" fill="#fff" font-size="28">x</text>`;
-        });
-      }
-
-      if (chord.barre) {
-        const [fret, fromString, toString] = chord.barre;
-        const x1 = xForString(fromString);
-        const x2 = xForString(toString);
-        const y = yForFret(fret);
-        svg += `<line x1="${x1}" y1="${y}" x2="${x2}" y2="${y}" stroke="#fff" stroke-width="24" stroke-linecap="round"/>`;
-      }
-
-      chord.fingers.forEach(([stringNumber, fret]) => {
-        if (fret === 0) return;
-        const x = xForString(stringNumber);
-        const y = yForFret(fret);
-        svg += `<circle cx="${x}" cy="${y}" r="17" fill="#fff"/>`;
-      });
-
-      for (let i = 1; i <= 4; i++) {
-        const fretNumber = startFret + i - 1;
-        const y = boardY + (i - 0.5) * fretGap + 10;
-        svg += `<text x="${boardX - 52}" y="${y}" text-anchor="middle" fill="#bfc2c8" font-size="26">${fretNumber}</text>`;
-      }
-
-      svg += `</svg>`;
-      target.innerHTML = svg;
-    }
-
-    function shuffle(array) {
-      return array
+    function shuffleNoSameChord(array) {
+      const source = array
         .map(value => ({ value, sort: Math.random() }))
         .sort((a, b) => a.sort - b.sort)
-        .map(item => item.value);
+        .map(entry => entry.value);
+
+      const result = [];
+
+      while (source.length) {
+        const last = result.length ? result[result.length - 1].chordName : null;
+
+        let index = source.findIndex(item => item.chordName !== last);
+
+        if (index === -1) index = 0;
+
+        result.push(source[index]);
+        source.splice(index, 1);
+      }
+
+      return result;
     }
 
-    document.querySelectorAll(".menu-row").forEach(row => {
-      row.addEventListener("click", () => {
-        openSelect(row.dataset.mode);
+    function createFretboard() {
+      string6El.innerHTML = "";
+      string5El.innerHTML = "";
+
+      createString(6, string6El);
+      createString(5, string5El);
+    }
+
+    function createString(stringNumber, target) {
+      for (let i = 0; i < 8; i++) {
+        const button = document.createElement("button");
+        button.className = "fret";
+        button.type = "button";
+        button.textContent = i + 1;
+        button.dataset.string = stringNumber;
+        button.dataset.fret = i + 1;
+        button.dataset.note = NOTES[stringNumber][i];
+
+        button.addEventListener("click", () => handleFretClick(button));
+
+        target.appendChild(button);
+      }
+    }
+
+    function startTraining() {
+      tasks = buildTasks();
+      currentIndex = 0;
+      score = 0;
+      mistakes = 0;
+      completeBox.classList.remove("active");
+      createFretboard();
+      loadTask();
+    }
+
+    function loadTask() {
+      clearFretboard();
+      resetShapeButtons();
+
+      rootFound = false;
+      shapeFound = false;
+      nextBtn.disabled = true;
+
+      currentTask = tasks[currentIndex];
+
+      taskTitleEl.innerHTML = `
+        Найдите ноту для аккорда
+        <span class="current-chord">${currentTask.chordName}</span>
+      `;
+
+      taskSubtitleEl.innerHTML = `
+        <span class="string-badge">на ${currentTask.string}-й струне</span>
+      `;
+
+      stepTitleEl.textContent = "Шаг 1: найдите ноту";
+      stepTextEl.textContent = `Нажми ноту ${currentTask.root} на ${currentTask.string}-й струне.`;
+      setMessage("Нажми правильную ноту на грифе.", "");
+
+      updateStats();
+    }
+
+    function handleFretClick(button) {
+      if (!currentTask || rootFound) return;
+
+      const selectedString = Number(button.dataset.string);
+      const selectedFret = Number(button.dataset.fret);
+      const selectedNote = button.dataset.note;
+
+      const isCorrect =
+        selectedString === currentTask.string &&
+        selectedFret === currentTask.fret &&
+        selectedNote === currentTask.root;
+
+      if (isCorrect) {
+        rootFound = true;
+        button.classList.add("correct");
+        button.textContent = currentTask.root;
+        enableShapeStep();
+      } else {
+        mistakes++;
+        button.classList.add("wrong");
+        setMessage("Не туда. Проверь струну и лад.", "bad");
+        updateStats();
+
+        setTimeout(() => {
+          button.classList.remove("wrong");
+        }, 420);
+      }
+    }
+
+    function enableShapeStep() {
+      stepTitleEl.textContent = "Шаг 2: какая форма аккорда?";
+      stepTextEl.textContent = "Выбери форму: E, Em, A или Am.";
+      setMessage("Теперь выбери правильную форму аккорда.", "good");
+
+      shapeButtons.forEach(button => {
+        button.disabled = false;
+        button.classList.remove("correct", "wrong");
       });
-    });
+    }
 
-    timeSwitch.addEventListener("click", () => {
-      unlimitedTime = !unlimitedTime;
-      timeSwitch.classList.toggle("active", unlimitedTime);
-    });
+    function handleShapeClick(button) {
+      if (!rootFound || shapeFound) return;
 
-    document.getElementById("backToMenu").addEventListener("click", () => {
-      showScreen(menuScreen);
-    });
+      const selectedShape = button.dataset.shape;
+      const correctShape = getCorrectShape(currentTask);
 
-    document.getElementById("clearSelectedBtn").addEventListener("click", () => {
-      selectedChords = [];
-      renderSelector();
-    });
+      if (selectedShape === correctShape) {
+        shapeFound = true;
+        score++;
 
-    document.getElementById("saveAndPlayBtn").addEventListener("click", startSelectedMode);
+        button.classList.add("correct");
+        setMessage(`Верно! ${currentTask.chordName} строится через форму ${correctShape}.`, "good");
 
-    document.getElementById("backFromGame").addEventListener("click", () => {
-      stopTimer();
-      showScreen(menuScreen);
-    });
+        shapeButtons.forEach(btn => {
+          btn.disabled = true;
+        });
 
-    document.getElementById("backFromLibrary").addEventListener("click", () => {
-      showScreen(menuScreen);
-    });
+        nextBtn.disabled = false;
+        updateStats();
 
-    document.getElementById("restartBtn").addEventListener("click", () => {
-      showScreen(menuScreen);
-    });
+        if (currentIndex === tasks.length - 1) {
+          nextBtn.textContent = "Завершить тренировку";
+        } else {
+          nextBtn.textContent = "Следующий аккорд";
+        }
+      } else {
+        mistakes++;
+        button.classList.add("wrong");
+        setMessage("Форма неверная. Подумай от какой струны строится аккорд и мажорный он или минорный.", "bad");
+        updateStats();
 
-    window.addEventListener("resize", () => {
-      if (gameScreen.classList.contains("active") && currentChordName) {
-        renderTask();
+        setTimeout(() => {
+          button.classList.remove("wrong");
+        }, 500);
+      }
+    }
+
+    function nextTask() {
+      if (!shapeFound) return;
+
+      if (currentIndex >= tasks.length - 1) {
+        finishTraining();
+        return;
       }
 
-      if (libraryScreen.classList.contains("active")) {
-        renderLibrary();
+      currentIndex++;
+      loadTask();
+    }
+
+    function finishTraining() {
+      clearFretboard();
+      resetShapeButtons();
+
+      taskTitleEl.innerHTML = `Тренировка завершена`;
+      taskSubtitleEl.innerHTML = "";
+
+      stepTitleEl.textContent = "Результат";
+      stepTextEl.textContent = `Верных ответов: ${score}. Ошибок: ${mistakes}.`;
+      setMessage("Отличная работа. Можно пройти тренировку ещё раз.", "good");
+
+      nextBtn.disabled = true;
+      nextBtn.textContent = "Следующий аккорд";
+      completeBox.classList.add("active");
+      updateStats();
+    }
+
+    function clearFretboard() {
+      [...document.querySelectorAll(".fret")].forEach(button => {
+        button.classList.remove("correct", "wrong");
+        button.textContent = button.dataset.fret;
+      });
+    }
+
+    function resetShapeButtons() {
+      shapeButtons.forEach(button => {
+        button.disabled = true;
+        button.classList.remove("correct", "wrong");
+      });
+    }
+
+    function setMessage(text, type) {
+      messageEl.textContent = text;
+      messageEl.className = "message";
+
+      if (type) {
+        messageEl.classList.add(type);
       }
+    }
+
+    function updateStats() {
+      progressValue.textContent = `${Math.min(currentIndex + 1, tasks.length)}/${tasks.length}`;
+      scoreValue.textContent = score;
+      mistakeValue.textContent = mistakes;
+    }
+
+    shapeButtons.forEach(button => {
+      button.addEventListener("click", () => handleShapeClick(button));
     });
 
-    renderSelector();
+    nextBtn.addEventListener("click", nextTask);
+    restartBtn.addEventListener("click", startTraining);
+
+    startTraining();
   </script>
 </body>
 </html>
